@@ -47,7 +47,7 @@ URL-адрес `/employee/100` и абсолютный `http://mydomain.ru/emplo
 Запустите команду
 
 ```
-php composer require vinogradsoft/navigator "^1.0.0"
+php composer require vinogradsoft/navigator "^1.0"
 ```
 
 Требуется PHP 8.0 или новее.

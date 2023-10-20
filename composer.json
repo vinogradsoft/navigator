@@ -7,11 +7,11 @@
       "email": "cmk.cmyk@mail.ru"
     }
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minimum-stability": "stable",
   "require": {
     "php": ">=8.0",
-    "vinogradsoft/compass": "^1.0",
+    "vinogradsoft/compass": "^1.1",
     "nikic/fast-route": "^1.3",
     "ext-intl": "*"
   },
