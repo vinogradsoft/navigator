@@ -1,28 +1,45 @@
-# Navigator
+<div align="center">
+<img alt="Navigator logo" src="banner.svg">
+<br/><br/>
+</div>
+<br/><br/>
+<div align="center">
+<strong>Create reusable applications.</strong>
+<br>
+Open source library.
+<br /><br />
+</div>
 
-> Генератор url. Работает с внутренней навигацией приложения и способен генерировать URL-адреса на внешние ресурсы.
-> Внутренняя навигация осуществляется на основе именованных определений маршрутов.
-> Именованные маршруты дают возможность удобно создавать URL-адреса, не привязываясь к домену или к определению
-> маршрута.
+<div align="center">
 
-## Общая информация
+[![codecov](https://codecov.io/gh/vinogradsoft/navigator/graph/badge.svg?token=73PNNFWLG1)](https://codecov.io/gh/vinogradsoft/navigator)
+<img src="https://badgen.net/static/license/MIT/green">
 
-Библиотека предназначена для приложений использующих в своем коде маршрутизатор
-[FastRoute](https://github.com/nikic/FastRoute#fastroute---fast-request-router-for-php). FastRoute использует
-определения маршрутов на основе регулярных выражений, а Navigator создает URL-адреса соответствующие этим определениям
-маршрутов.
+</div>
 
-Для постоянства кода определениям маршрутов назначаются имена.
+## What is Navigator?
+
+> 👉 Navigator is a url generator. Works with internal application navigation and is able to generate URLs to external
+> resources. Internal navigation is based on named route definitions. Named routes allow you to conveniently create URLs
+> without being tied to a domain or route definition.
+
+## General Information
+
+The library is intended for applications that use
+the [FastRoute](https://github.com/nikic/FastRoute#fastroute---fast-request-router-for-php) router in their code.
+FastRoute uses regular expression route definitions, and Navigator creates URLs that match those route definitions.
+
+For code consistency, route definitions are assigned names.
 
 ```
-   имя           определение 
- маршрута          маршрута
+   route            route 
+    name        determination
  /‾‾‾‾‾‾‾\      /‾‾‾‾‾‾‾‾‾‾‾\
 'user/view' => '/user/{id:\d+}',
 ```
 
-Это позволяет манипулировать URL-адресами без внесения изменений в существующий код. Например, для создания URL-адреса
-именованного определения `'user' => '/user/{id:\d+}'`, можно использовать следующий код:
+This allows URLs to be manipulated without making changes to existing code. For example, to create a URL for a named
+definition `'user' => '/user/{id:\d+}'`, you could use the following code:
 
 ```php 
 /** relative url */
@@ -32,27 +49,25 @@ echo $urlBuilder->build('/user', ['id' => 100]); # /user/100
 echo $urlBuilder->build('/user', ['id' => 100], true); # http://mydomain.ru/user/100
 ```
 
-Если по какой-либо причине потребуется изменить адрес с `/user/100` на `/employee/100`, вам нужно будет просто изменить
-настройку маршрута с `'/user/{id:\d+}'` на `'/employee/{id:\d+}'`. После этого код выше будет создавать относительный
-URL-адрес `/employee/100` и абсолютный `http://mydomain.ru/employee/100`.
+If for any reason you need to change the address from `/user/100` to `/employee/100`, you will simply need to change the
+route setting from `'/user/{id:\d+}'` to `'/employee/{id:\d+}'`. The code above will then create the relative URL
+`/employee/100` and the absolute URL `http://mydomain.ru/employee/100`.
 
-В объекте класса `Navigator\UrlBuilder` два метода генерации URL: `build` и `buildExternal`. Метод `build` используется
-для навигации внутри приложения, а `buildExternal` создает URL для внешних ресурсов и может генерировать только
-абсолютные URL-адреса.
+The `Navigator\UrlBuilder` class object has two methods for generating URLs: `build` and `buildExternal`. The `build`
+method is used for navigation within the application, and `buildExternal` creates URLs for external resources and can
+only generate absolute URLs.
 
-## Установка
+## Install
 
-Предпочтительный способ установки - через [composer](http://getcomposer.org/download/).
-
-Запустите команду
+To install with composer:
 
 ```
 php composer require vinogradsoft/navigator "^1.0"
 ```
 
-Требуется PHP 8.0 или новее.
+Requires PHP 8.0 or newer.
 
-## Быстрый старт
+## 🚀 Quick Start
 
 ```php
 <?php
@@ -77,47 +92,46 @@ echo $urlBuilder->build('/user', ['var_name' => 'var_value']), '<br>';  # /user/
 echo $urlBuilder->build('user', ['var_name' => 'var_value']), '<br>';  # user/var_value
 ```
 
-## Конструктор
+## Constructor
 
-Конструктор имеет шесть параметров, пожалуй самые главные первые два.
-Первым параметром идет `$baseUrl` - в данном примере его значение равно `'https://vinograd.soft'` - это базовый URL,
-который используется для генерации абсолютных URL-адресов внутри приложения.
+The constructor has six parameters, perhaps the most important are the first two. The first parameter is `$baseUrl` - in
+this example its value is `'https://vinograd.soft'` - this is the base URL, which is used to generate absolute URLs
+within the application.
 
-Второй параметр `$rulesProvider` принимает экземпляр реализации интерфейса `Navigator\RulesProvider`.
-В примере используется реализация `Navigator\ArrayRulesProvider`, которая работает с обычным массивом
-зарегистрированных маршрутов. По сути это источник именованных определений маршрутов.
+The second parameter `$rulesProvider` accepts an implementation instance of the `Navigator\RulesProvider` interface. The
+example uses the `Navigator\ArrayRulesProvider` implementation, which operates on a regular array of registered routes.
+It is essentially a source of named route definitions.
 
-## Параметры метода `build`
+## Parameters Of The `build(...)` Method
 
-### Параметр `$name`
+### Parameter `$name`
 
-Параметром `$name` вы передаете имя маршрута. На основе значения этого параметра система понимает с каким определением
-работает и преобразует его в URL-адрес. В примере используется два случая `'user'` и `'/user'`.
-Стоит отметить, что символ “/” в начале передаваемого имени никак не влияет на поиск маршрута, он указывает системе, что
-данный символ должен быть включен в начало генерируемого URL-адреса. Система распознает этот символ затем
-осуществляет поиск маршрута по имени, исключая из него данный символ. После этого “/” используется системой как
-индикатор того, что его необходимо включить в начало формируемого относительного URL-адреса.
+With the `$name` parameter you pass the name of the route. Based on the value of this parameter, the system understands
+which definition it is working with and converts it into a URL. The example uses two cases `'user'` and `'/user'`. It is
+worth noting that the “/” character at the beginning of the transmitted name does not affect the route search in any
+way; it indicates to the system that this character should be included at the beginning of the generated URL. The system
+recognizes this symbol and then searches for the route by name, excluding this symbol from it. The “/” is then used by
+the system as an indicator that it should be included at the beginning of the relative URL being generated.
 
-### Параметр `$placeholders`
+### Parameter `$placeholders`
 
-Может быть `массивом настроек заполнителей` или `null`.
+Can be `array of placeholder settings` or `null`.
 
-#### Массив настроек заполнителей
+#### Array Of Placeholder Settings
 
-Из примера, `$urlBuilder` работает с определением маршрута `'/user[/{var_name}]'`, где `var_name` это динамическая
-часть,
-другими словами переменная.
+From the example, $urlBuilder works with the route definition `'/user[/{var_name}]'`, where `var_name` is the dynamic
+part, in other words a variable.
 
-В метод `build` мы передали такой массив `['var_name' => 'var_value']`, где `'var_name'` переменная из определения
-маршрута, а `'var_value'` ее значение, т.е. то чем `'var_name'` в результате будет заменена, в нашем случае результат
-для абсолютного URL-адреса такой `https://vinograd.soft/user/var_value`.
+We passed the following array to the build method `['var_name' => 'var_value']`, where `'var_name'` is a variable from
+the route definition, and 'var_value' is its value, i.e. then what 'var_name' will be replaced with as a result, in our
+case the result for the absolute URL is `https://vinograd.soft/user/var_value`.
 
 #### NULL
 
-NULL используется в случаях генерации статических URL, которым не нужны настройки в директориях пути, такому как это
-определение `'user' => '/user'`.
+`NULL` is used in cases of generating static URLs that do not need settings in the path directories, such as this
+definition `'user' => '/user'`.
 
-Пример:
+Example:
 
 ```php
 $urlBuilder = new UrlBuilder(
@@ -130,24 +144,21 @@ $urlBuilder = new UrlBuilder(
 echo $urlBuilder->build('/user', null, true); # https://vinograd.soft/user/profile
 ```
 
-### Параметр `$absolute`
+### `$absolute` parameter
 
-Этот булевый параметр указывает системе, какой URL-адрес создавать: абсолютный или относительный. Передача `true`
-приведет к созданию абсолютного адреса, в противном случае будет создан относительный адрес. Значение по умолчанию
-равно `false`.
+This Boolean parameter tells the system whether to create an absolute or relative URL. Passing `true` will create an
+absolute address, otherwise a relative address will be created. The default value is `false`.
 
-## Конфигурация маршрутов
+## Route Configuration
 
-Имена определений не имеют жесткого формата, поэтому какие давать имена зависит от вас.
-Вы можете использовать формат `<контроллер>/<действие>` пример: `post/view`.
-Или добавлять в начало название модуля `blog/post/view`.
+Definition names do not have a rigid format, so what names you give is up to you. You can use the
+format `<controller>/<action>` example: `post/view`. Or add the name of the module `blog/post/view` to the beginning.
 
-Важно запомнить одно, нельзя чтобы первым символом был `/`. Такое имя не правильное `/blog/post/view` в моменте
-генерации URL методом `build`, маршрут с таким именем не будет найден, поскольку система будет его искать без
-символа `/`
-в начале, затем будет выброшено исключение `Navigator\RoutConfigurationException`.
+It is important to remember one thing: the first character cannot be `/`. This name is not correct `/blog/post/view`
+when the URL is generated by the `build` method, a route with this name will not be found, since the system will look
+for it without the `/` character at the beginning, then a `Navigator\RoutConfigurationException` will be thrown.
 
-Пример правильного имени маршрута:
+Example of a correct route name:
 
 ```php
 new ArrayRulesProvider([
@@ -155,7 +166,7 @@ new ArrayRulesProvider([
 ]);
 ```
 
-Пример **НЕДОПУСТИМОГО** имени маршрута:
+Example of an **ILLEGAL** route name:
 
 ```php
 new ArrayRulesProvider([
@@ -164,15 +175,15 @@ new ArrayRulesProvider([
 ]);
 ```
 
-> В именах совсем не обязателен символ `/`, имя может быть и таким `blog.post.view` или каким-то другим не имеющим
-> разделителей вовсе.
+> The `/` symbol is not required in names; the name can be `blog.post.view` or something else that has no delimiters at
+> all.
 
-Как формировать маршруты вы можете прочитать в документации к библиотеке
-[FastRoute](https://github.com/nikic/FastRoute#defining-routes).
+You can read how to create routes in the documentation for
+the [FastRoute](https://github.com/nikic/FastRoute#defining-routes) library.
 
-## Заполнители
+## Placeholders
 
-### Схема показывает какой заполнитель, за какой участок URL-адреса отвечает
+### The scheme shows which placeholder is responsible for which part of the URL
 
 ```
   |------------------------------:src--------------------------------------------------|
@@ -183,28 +194,28 @@ new ArrayRulesProvider([
  :scheme  :user :password    :host      :port                :suffix
 ```
 
-Не все заполнители доступны для обоих методов генерации. Таблица ниже показывает доступность каждого заполнителя и тип
-данных значения.
+Not all placeholders are available for both generation methods. The table below shows the availability of each
+placeholder and the data type of the value.
 
-| Заполнитель                          | Доступность для метода `build` | Доступность для метода `buildExternal` | Тип                                                                   |
-|--------------------------------------|:------------------------------:|:--------------------------------------:|:----------------------------------------------------------------------|
-| `название переменной из определения` |             **ДА**             |                  НЕТ                   | `string/int`<br> тип `bool` - для переменных без фигурных скобок`{}`. |
-| `:src`                               |              НЕТ               |                 **ДА**                 | `string`                                                              |
-| `:scheme`                            |              НЕТ               |                 **ДА**                 | `string`                                                              |
-| `:user`                              |              НЕТ               |                 **ДА**                 | `string`                                                              |
-| `:password`                          |              НЕТ               |                 **ДА**                 | `string`                                                              |
-| `:host`                              |              НЕТ               |                 **ДА**                 | `string`                                                              |
-| `:port`                              |              НЕТ               |                 **ДА**                 | `string`                                                              |
-| `:path`                              |              НЕТ               |                 **ДА**                 | `string/array`                                                        |
-| `:suffix`                            |              НЕТ               |                 **ДА**                 | `string`                                                              |
-| `?`                                  |             **ДА**             |                 **ДА**                 | `string/array`                                                        |
-| `#`                                  |             **ДА**             |                 **ДА**                 | `string`                                                              |
-| `:strategy`                          |             **ДА**             |                 **ДА**                 | `string`                                                              |
-| `:idn`                               |             **ДА**             |                 **ДА**                 | `bool`                                                                |      
+| Placeholder                     | Availability for `build` method | Availability for `buildExternal` method | Type                                                                    |
+|---------------------------------|:-------------------------------:|:---------------------------------------:|:------------------------------------------------------------------------|
+| `variable name from definition` |             **YES**             |                   NO                    | `string/int`<br> type `bool` - for variables without curly braces `{}`. |
+| `:src`                          |               NO                |                 **YES**                 | `string`                                                                |
+| `:scheme`                       |               NO                |                 **YES**                 | `string`                                                                |
+| `:user`                         |               NO                |                 **YES**                 | `string`                                                                |
+| `:password`                     |               NO                |                 **YES**                 | `string`                                                                |
+| `:host`                         |               NO                |                 **YES**                 | `string`                                                                |
+| `:port`                         |               NO                |                 **YES**                 | `string`                                                                |
+| `:path`                         |               NO                |                 **YES**                 | `string/array`                                                          |
+| `:suffix`                       |               NO                |                 **YES**                 | `string`                                                                |
+| `?`                             |             **YES**             |                 **YES**                 | `string/array`                                                          |
+| `#`                             |             **YES**             |                 **YES**                 | `string`                                                                |
+| `:strategy`                     |             **YES**             |                 **YES**                 | `string`                                                                |
+| `:idn`                          |             **YES**             |                 **YES**                 | `bool`                                                                  |      
 
-## Примеры использования заполнителей
+## ⚡ Examples Of Using Placeholders
 
-Для начала сконфигурируем `$urlBuilder` таким образом:
+First, let's configure `$urlBuilder` this way:
 
 ```php
 $urlBuilder = new UrlBuilder(
@@ -216,49 +227,48 @@ $urlBuilder = new UrlBuilder(
 );
 ```
 
-### **Название переменной из определения**
+### **👉 Variable Name From Definition**
 
-> Не обязательные параметры в определениях не обрамленные в фигурные скобки имеют тип заполнителя `bool`.
+> Optional parameters in definitions not enclosed in curly braces have a placeholder type of `bool`.
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Страница "about" имеет в определении суффикс - не обязательный параметр `.html` без фигурных скобок. Требуется
-сгенерировать URL с этим суффиксом.
+The "about" page has a suffix in its definition - an optional parameter `.html` without curly braces. You need to
+generate a URL with this suffix.
 
 ```php
 echo $urlBuilder->build('about', ['.html' => true], true); # https://vinograd.soft/about.html
 ```
 
-#### **Пример 2.**
+#### **Example 2.**
 
-Сгенерируйте абсолютный URL-адрес используя необязательный заполнитель для определения `'user' => '/user[/{var_name}]'`.
+Generate an absolute URL using the optional placeholder to specify `'user' => '/user[/{var_name}]'`.
 
 ```php
 echo $urlBuilder->build('/user', ['var_name' => 'my_unique_value'], true); 
 # https://vinograd.soft/user/my_unique_value
 ```
 
-#### **Пример 3.**
+#### **Example 3.**
 
-Требуется сгенерировать относительный URL-адрес с символом `/` в начале для определения
-`'user' => '/user[/{var_name}]'`.
+You need to generate a relative URL with a leading `/` to define `'user' => '/user[/{var_name}]'`.
 
 ```php
 echo $urlBuilder->build('/user', ['var_name' => 'my_unique_value']); # /user/my_unique_value
 ```
 
-#### **Пример 4.**
+#### **Example 4.**
 
-Создайте относительный URL-адрес без символа `/` в начале для определения `'user' => '/user[/{var_name}]'`.
+Create a relative URL without the leading `/` to define `'user' => '/user[/{var_name}]'`.
 
 ```php
 echo $urlBuilder->build('user', ['var_name' => 'my_unique_value']); # user/my_unique_value
 ```
 
-#### **Пример 5.**
+#### **Example 5.**
 
-Определение `'user' => '/user[/{var_name}]'` имеет не обязательный параметр `var_name`. Нужно сгенерировать абсолютный
-URL-адрес без этого параметра.
+The definition `'user' => '/user[/{var_name}]'` has an optional parameter `var_name`. You need to generate an absolute
+URL without this parameter.
 
 ```php
 echo $urlBuilder->build('user', null, true); # https://vinograd.soft/user
@@ -266,16 +276,16 @@ echo $urlBuilder->build('user', null, true); # https://vinograd.soft/user
 
 ---
 
-### **:src**
+### **👉 :src**
 
-#### **Пример 1.**
+#### **Example 1.**
 
-В приложении есть переменная в которую записан URL-адрес внешнего ресурса. Нужно внести в URL-адрес несколько
-изменений:
+The application has a variable that contains the URL of an external resource. There are a few changes you need to make
+to the URL:
 
-+ изменить его схему с `http` на `ftp`
-+ добавить имя пользователя `grigor` и пароль `password123`
-+ изменить порт на `21`.
++ change its scheme from `http` to `ftp`
++ add username `grigor` and password `password123`
++ change port to `21`.
 
 ```php
 $externalAddress = 'http://another.site:8080/path/to/resource';
@@ -289,9 +299,9 @@ echo $urlBuilder->buildExternal([
 # ftp://grigor:password123@another.site:21/path/to/resource
 ```
 
-#### **Пример 2.**
+#### **Example 2.**
 
-Добавьте путь `blog/post/41` к URL-адресу главной странице другого сайта `http://another.site`.
+Add the path `blog/post/41` to the other site's homepage URL `http://another.site`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -303,11 +313,11 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:scheme**
+### **👉 :scheme**
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Измените схему URL-адреса `http://another.site` с `http` на `https`.
+Change the URL scheme of `http://another.site` from `http` to `https`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -317,9 +327,10 @@ echo $urlBuilder->buildExternal([
 # https://another.site
 ```
 
-#### **Пример 2.**
+#### **Example 2.**
 
-Создайте URL-адрес `https://another.site/path/to/resource` из имеющихся в приложении частей со схемой `https`.
+Create a URL `https://another.site/path/to/resource` from the parts available in the application with the
+scheme `https`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -332,11 +343,11 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:user**
+### **👉 :user**
 
-#### **Пример.**
+#### **Example.**
 
-Добавьте имя пользователя `user` для URL-адреса `http://another.site`.
+Add the username `user` for the URL `http://another.site`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -348,15 +359,15 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:password**
+### **👉 :password**
 
-> Этот заполнитель работает только в паре с заполнителем `:user`. Часть `:user` либо должна присутствовать в исходном
-> URL-адресе передаваемом в заполнителе `:src`, либо должен передаваться в паре с заполнителем `:password`, если `:user`
-> в URL его не окажется, будет выброшено исключение `Navigator\BadParameterException`.
+> This placeholder only works when paired with the `:user` placeholder. The `:user` part either must be present in the
+> original URL passed in the `:src` placeholder, or must be passed in pairs with the `:password` placeholder; if `:user`
+> is not present in the URL, a `Navigator\BadParameterException` will be thrown.
 
-#### **Пример.**
+#### **Example.**
 
-Добавьте имя пользователя `grigor` и пароль `password123` для URL-адреса `ftp://another.site:21`.
+Add the username `grigor` and password `password123` for the URL `ftp://another.site:21`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -369,16 +380,16 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:host**
+### **👉 :host**
 
-> Заполнитель `:host` используется в паре с заполнителем `:scheme`. В случае когда вы не используете
-> заполнитель `:src`, хотите создать URL-адрес из частей, то `:host` и `':scheme'` будут обязательными, при отсутствии
-> любого из них будет выброшено исключение `Navigator\BadParameterException`. `:host` единственный заполнитель
-> который не переопределяет свой участок в URL-адресе переданным заполнителем `:src`.
+> The `:host` placeholder is used in conjunction with the `:scheme` placeholder. In the case where you do not use
+> the `:src` placeholder and want to create a URL from parts, then `:host` and `':scheme'` will be required; if either
+> of them is missing, a `Navigator\BadParameterException` will be thrown. `:host` is the only placeholder that does not
+> override its portion of the URL with the passed `:src` placeholder.
 
-#### **Пример.**
+#### **Example.**
 
-Требуется создать URL-адрес `http://another.site`.
+You need to create the URL `http://another.site`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -390,11 +401,11 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:port**
+### **👉 :port**
 
-#### **Пример.**
+#### **Example.**
 
-Создайте URL-адрес `http://another.site` с портом `5000`.
+Create a URL `http://another.site` with port `5000`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -407,11 +418,11 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:path**
+### **👉 :path**
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Требуется создать URL-адрес `https://another.site/path/to` используя значение заполнителя с типом `array`.
+You need to create a URL `https://another.site/path/to` using a placeholder value of type `array`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -421,9 +432,9 @@ echo $urlBuilder->buildExternal([
 # https://another.site/path/to
 ``` 
 
-#### **Пример 2.**
+#### **Example 2.**
 
-Сгенерируйте URL-адрес `https://another.site/path/to` используя значение заполнителя с типом `string`.
+Generate the URL `https://another.site/path/to` using a placeholder value of type `string`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -435,15 +446,15 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:suffix**
+### **👉 :suffix**
 
-> С суффиксами есть один нюанс, если вы передаете URL-адрес с суффиксом средствами заполнителя `:src` вы не сможете
-> его переопределить заполнителем `:suffix`, вы можете его только добавить, поскольку суффиксом может быть любая стока,
-> он не анализируется и будет являться частью path.
+> There is one caveat with suffixes, if you pass a URL with a suffix using the `:src` placeholder, you cannot override
+> it with the `:suffix` placeholder, you can only add it, since the suffix can be any string, it is not parsed and will
+> be part of the path.
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Добавьте к URL-адресу `https://another.site/path/to` расширение `.html`.
+Add a `.html` extension to the `https://another.site/path/to` URL.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -454,9 +465,9 @@ echo $urlBuilder->buildExternal([
 # https://another.site/path/to.html
 ``` 
 
-#### **Пример 2.**
+#### **Example 2.**
 
-Добавьте суффикс `-city` к URL-адресу `https://another.site/path/to?q=value#news`.
+Add the suffix `-city` to the URL `https://another.site/path/to?q=value#news`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -468,20 +479,20 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **Заполнитель `?`**
+### **👉 Placeholder `?`**
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Добавьте парамер `s` со значением `Hello world` URL-адресу `https://another.site`.
+Add the `s` parameter with the value `Hello world` to the `https://another.site` URL.
 
 ```php
 echo $urlBuilder->buildExternal([':src' => 'https://another.site', '?' => ['s' => 'Hello world']]);
 # https://another.site/?s=Hello%20world
-```  
+```
 
-#### **Пример 2.**
+#### **Example 2.**
 
-В системе есть подготовленный параметр `s=Hello world` нужно добавить его к URL-адресу `https://another.site`.
+The system has a prepared parameter `s=Hello world`, you need to add it to the URL `https://another.site`.
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -491,10 +502,10 @@ echo $urlBuilder->buildExternal([
 # https://another.site/?s=Hello%20world
 ```  
 
-#### **Пример 3.**
+#### **Example 3.**
 
-Требуется создать URL-адрес для ссылки на результаты поиска другого сайта `https://another.site` со следующими
-параметрами:
+You need to create a URL to link to the search results of another site `https://another.site` with the following
+parameters:
 
 ```php
     [
@@ -507,7 +518,7 @@ echo $urlBuilder->buildExternal([
     ]
 ```
 
-Код:
+Code:
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -526,35 +537,34 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **Заполнитель `#`**
+### **👉 Placeholder `#`**
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Задача сформировать адрес для ссылки на документацию библиотеки `vinogradsoft/compass`, параграф
-`быстрый-старт`.
+The task is to generate an address for a link to the documentation of the `vinogradsoft/compass` library, quick start
+paragraph.
 
 ```php
 echo $urlBuilder->buildExternal([
     ':src' => 'https://github.com/vinogradsoft/compass',
-    '#' => 'быстрый-старт'
+    '#' => 'quick-start'
 ]);
-# https://github.com/vinogradsoft/compass#быстрый-старт
+# https://github.com/vinogradsoft/compass#quick-start
 ```
 
 ---
 
-### **:strategy**
+### **👉 :strategy**
 
-> Для использования стратегий создания URL-адресов нужно либо реализовать интерфейс `Compass\UrlStrategy`,
-> либо наследоваться от класса `Compass\DefaultUrlStrategy`. Более подробно о принципах работы стратегий можно прочитать
-> в документации к библиотеке
-> [Compass](https://github.com/vinogradsoft/compass#%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%B5%D0%B3%D0%B8%D0%B8-%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F).
+> To use URL generation strategies, you must either implement the `Compass\UrlStrategy` interface or inherit from the
+> `Compass\DefaultUrlStrategy` class. More details about the principles of operation of strategies can be found in the
+> documentation for the [Compass](https://github.com/vinogradsoft/compass#upgrade-strategies) library.
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Задача сделать стратегию для генерации URL-адресов реферальных ссылок с параметром `refid` равному `222`.
+The task is to create a strategy for generating referral link URLs with the `refid` parameter equal to `222`.
 
-Код стратегии:
+Strategy code:
 
 ```php
 <?php
@@ -596,7 +606,7 @@ class ReferralUrlStrategy extends DefaultUrlStrategy
 }
 ```
 
-Добавим стратегию в конструктор `$urlBuilder`:
+Let's add a strategy to the `$urlBuilder` constructor:
 
 ```php
 $urlBuilder = new UrlBuilder(
@@ -608,7 +618,7 @@ $urlBuilder = new UrlBuilder(
 );
 ```
 
-Генерируем URL-адрес:
+Generating the URL:
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -618,12 +628,13 @@ echo $urlBuilder->buildExternal([
 # https://another.site/path/to/resource?refid=222
 ```
 
-#### **Пример 2.**
+#### **Example 2.**
 
-Возьмем стратегию из Примера 1 этого параграфа, и сделаем ее стратегией по умолчанию для генерации внешних URL-адресов.
+Let's take the strategy from Example 1 of this paragraph and make it the default strategy for generating external URLs.
 
-Заменим в экземпляре класса `Compass\Url` стратегию и передадим его в конструктор нашего `$urlBuilder` пятым
-параметром (`$externalUrl`):
+Let's replace the strategy in the instance of the `Compass\Url` class and pass it to the constructor of
+our `$urlBuilder`
+with the fifth parameter (`$externalUrl`):
 
 ```php
 $externalUrl = Url::createBlank();
@@ -640,7 +651,7 @@ $urlBuilder = new UrlBuilder(
 );
 ```
 
-Генерируем URL-адрес:
+Generating the URL:
 
 ```php
 echo $urlBuilder->buildExternal([
@@ -651,11 +662,11 @@ echo $urlBuilder->buildExternal([
 
 ---
 
-### **:idn**
+### **👉 :idn**
 
-#### **Пример 1.**
+#### **Example 1.**
 
-Задача конвертировать URL-адрес `https://россия.рф` в panycode.
+The task is to convert the URL `https://россия.рф` into panycode.
 
 ```php
 echo $urlBuilder->buildExternal([':src' => 'https://россия.рф', ':idn' => true]);
@@ -664,16 +675,14 @@ echo $urlBuilder->buildExternal([':src' => 'https://россия.рф', ':idn' =
 
 ---
 
-## Тестировать
+## Testing
 
 ``` php composer tests ```
 
-## Содействие
+## Contributing
 
-Пожалуйста, смотрите [ВКЛАД](https://github.com/vinogradsoft/navigator/blob/master/CONTRIBUTING.md) для получения
-подробной информации.
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-## Лицензия
+## License
 
-Лицензия MIT (MIT). Пожалуйста, смотрите [файл лицензии](https://github.com/vinogradsoft/navigator/blob/master/LICENSE)
-для получения дополнительной информации.
+The MIT License (MIT). Please see License [File](LICENSE) for more information.
