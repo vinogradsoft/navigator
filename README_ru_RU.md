@@ -1,5 +1,5 @@
 <div align="center">
-<img alt="refine logo" src="banner.svg">
+<img alt="Navigator logo" src="banner.svg">
 <br/><br/>
 </div>
 <br/><br/>
@@ -491,7 +491,7 @@ echo $urlBuilder->buildExternal([
 
 #### **Пример 1.**
 
-Добавьте парамер `s` со значением `Hello world` URL-адресу `https://another.site`.
+Добавьте параметр `s` со значением `Hello world` URL-адресу `https://another.site`.
 
 ```php
 echo $urlBuilder->buildExternal([':src' => 'https://another.site', '?' => ['s' => 'Hello world']]);
@@ -549,15 +549,14 @@ echo $urlBuilder->buildExternal([
 
 #### **Пример 1.**
 
-Задача сформировать адрес для ссылки на документацию библиотеки `vinogradsoft/compass`, параграф
-`быстрый-старт`.
+Задача сформировать адрес для ссылки на документацию библиотеки `vinogradsoft/compass`, параграф `quick-start`.
 
 ```php
 echo $urlBuilder->buildExternal([
     ':src' => 'https://github.com/vinogradsoft/compass',
-    '#' => 'быстрый-старт'
+    '#' => 'quick-start'
 ]);
-# https://github.com/vinogradsoft/compass#быстрый-старт
+# https://github.com/vinogradsoft/compass#quick-start
 ```
 
 ---
@@ -567,7 +566,7 @@ echo $urlBuilder->buildExternal([
 > Для использования стратегий создания URL-адресов нужно либо реализовать интерфейс `Compass\UrlStrategy`,
 > либо наследоваться от класса `Compass\DefaultUrlStrategy`. Более подробно о принципах работы стратегий можно прочитать
 > в документации к библиотеке
-> [Compass](https://github.com/vinogradsoft/compass#%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%B5%D0%B3%D0%B8%D0%B8-%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F).
+> [Compass](https://github.com/vinogradsoft/compass/blob/master/README-ru_RU.md#%D1%81%D1%82%D1%80%D0%B0%D1%82%D0%B5%D0%B3%D0%B8%D0%B8-%D0%BE%D0%B1%D0%BD%D0%BE%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F).
 
 #### **Пример 1.**
 
@@ -689,10 +688,9 @@ echo $urlBuilder->buildExternal([':src' => 'https://россия.рф', ':idn' =
 
 ## Содействие
 
-Пожалуйста, смотрите [ВКЛАД](https://github.com/vinogradsoft/navigator/blob/master/CONTRIBUTING.md) для получения
+Пожалуйста, смотрите [ВКЛАД](CONTRIBUTING.md) для получения
 подробной информации.
 
 ## Лицензия
 
-Лицензия MIT (MIT). Пожалуйста, смотрите [файл лицензии](https://github.com/vinogradsoft/navigator/blob/master/LICENSE)
-для получения дополнительной информации.
+Лицензия MIT (MIT). Пожалуйста, смотрите [файл лицензии](LICENSE) для получения дополнительной информации.
